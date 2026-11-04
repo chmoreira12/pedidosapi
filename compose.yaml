@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: pedidosapi-postgres
+    environment:
+      POSTGRES_DB: pedidosdb
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pedidosapi_data:/var/lib/postgresql/data
+
+volumes:
+  pedidosapi_data:

@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: pedidosapi
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5433/pedidosdb}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: false
+
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
