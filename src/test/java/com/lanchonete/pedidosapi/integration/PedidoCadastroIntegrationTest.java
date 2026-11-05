@@ -20,6 +20,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -116,6 +117,35 @@ public class PedidoCadastroIntegrationTest {
 
 
 
+    }
+
+    @Test
+    void naoDeveCadastrarPedidoComProdutoInexistente() {
+
+        Produto hamburguer = new Produto();
+        hamburguer.setNome("Hamburguer");
+        hamburguer.setPreco(new BigDecimal("25.00"));
+        hamburguer.setAtivo(true);
+
+        produtoRepository.save(hamburguer);
+
+        UUID produtoInexistenteId = UUID.randomUUID();
+
+        PedidoRequestDTO dto = new PedidoRequestDTO(
+                "Carlos",
+                "Pedido com produto inexistente",
+                List.of(new ItemPedidoRequestDTO(hamburguer.getId(), 2),
+                        new ItemPedidoRequestDTO(produtoInexistenteId, 1))
+        );
+
+        long quantidadeAntes = pedidoRepository.count();
+
+        assertThrows(RuntimeException.class,
+                () -> pedidoService.cadastrar(dto));
+
+        long quantidadeDepois = pedidoRepository.count();
+
+        assertEquals(quantidadeAntes, quantidadeDepois);
     }
 
 }
