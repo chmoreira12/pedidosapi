@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
@@ -44,6 +45,9 @@ public class PedidoCadastroIntegrationTest {
 
     @Autowired
     private EntityManager entityManager;
+
+    @Autowired
+    private TransactionTemplate transactionTemplate;
 
     @Test
     void deveCadastrarPedidoComTresItens() {
@@ -146,6 +150,30 @@ public class PedidoCadastroIntegrationTest {
         long quantidadeDepois = pedidoRepository.count();
 
         assertEquals(quantidadeAntes, quantidadeDepois);
+    }
+
+    @Test
+    void deveDesfazerGravacaoQuandoOcorrerExcecao() {
+
+        long quantidadeAntes = pedidoRepository.count();
+
+        Pedido pedido = new Pedido();
+        pedido.setCliente("Carlos");
+        pedido.setDescricao("Pedido para testar rollback!");
+        pedido.setStatus(StatusPedido.RECEBIDO);
+
+
+        assertThrows(RuntimeException.class, () -> {
+            transactionTemplate.executeWithoutResult(status -> {
+                pedidoRepository.saveAndFlush(pedido);
+                throw new RuntimeException("Falha simulada!");
+            });
+        });
+
+        long quantidadeDepois = pedidoRepository.count();
+
+        assertEquals(quantidadeAntes, quantidadeDepois);
+
     }
 
 }
