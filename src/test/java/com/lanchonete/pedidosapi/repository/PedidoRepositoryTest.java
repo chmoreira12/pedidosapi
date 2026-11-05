@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
@@ -46,7 +45,6 @@ public class PedidoRepositoryTest {
     void deveSalvarPedidoNoBanco() {
 
         Pedido pedido = new Pedido();
-        pedido.setId(UUID.randomUUID());
         pedido.setCliente("João");
         pedido.setDescricao("Hamburguer");
         pedido.setStatus(StatusPedido.RECEBIDO);
@@ -76,19 +74,16 @@ public class PedidoRepositoryTest {
     @Test
     void deveBuscarPedidosPorCliente() {
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("João");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("Maria");
         pedido2.setDescricao("X-salada");
         pedido2.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("João");
         pedido3.setDescricao("Refri");
         pedido3.setStatus(StatusPedido.RECEBIDO);
@@ -108,19 +103,16 @@ public class PedidoRepositoryTest {
     void deveBuscarPedidosPorStatus() {
 
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("João");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("Maria");
         pedido2.setDescricao("X-salada");
         pedido2.setStatus(StatusPedido.EM_PREPARACAO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("Roberto");
         pedido3.setDescricao("Pipoca");
         pedido3.setStatus(StatusPedido.RECEBIDO);
@@ -139,25 +131,21 @@ public class PedidoRepositoryTest {
     void buscaPorClienteEStatus() {
 
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("João");
         pedido1.setDescricao("X-burguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("João");
         pedido2.setDescricao("Batata frita");
         pedido2.setStatus(StatusPedido.ENTREGUE);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("Maria");
         pedido3.setDescricao("X-salada");
         pedido3.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido4 = new Pedido();
-        pedido4.setId(UUID.randomUUID());
         pedido4.setCliente("João");
         pedido4.setDescricao("Refri");
         pedido4.setStatus(StatusPedido.RECEBIDO);
@@ -179,25 +167,21 @@ public class PedidoRepositoryTest {
     @Test
     void buscarPorClienteEDoisStatus() {
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("João");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("João");
         pedido2.setDescricao("Refri");
         pedido2.setStatus(StatusPedido.EM_PREPARACAO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("João");
         pedido3.setDescricao("Batata frita");
         pedido3.setStatus(StatusPedido.ENTREGUE);
 
         Pedido pedido4 = new Pedido();
-        pedido4.setId(UUID.randomUUID());
         pedido4.setCliente("Maria");
         pedido4.setDescricao("Suco");
         pedido4.setStatus(StatusPedido.EM_PREPARACAO);
@@ -225,25 +209,21 @@ public class PedidoRepositoryTest {
     @Test
     void buscarPorClienteEStatus() {
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("João");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("João");
         pedido2.setDescricao("Hamburguer");
         pedido2.setStatus(StatusPedido.EM_PREPARACAO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("João");
         pedido3.setDescricao("Hamburguer");
         pedido3.setStatus(StatusPedido.ENTREGUE);
 
         Pedido pedido4 = new Pedido();
-        pedido4.setId(UUID.randomUUID());
         pedido4.setCliente("Maria");
         pedido4.setDescricao("Hamburguer");
         pedido4.setStatus(StatusPedido.RECEBIDO);
@@ -273,19 +253,16 @@ public class PedidoRepositoryTest {
     @Test
     void buscarPedidosOrdenadoPorCliente() {
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("Pedro");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("Ana");
         pedido2.setDescricao("Hamburguer");
         pedido2.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("João");
         pedido3.setDescricao("Hamburguer");
         pedido3.setStatus(StatusPedido.RECEBIDO);
@@ -306,19 +283,16 @@ public class PedidoRepositoryTest {
     @Test
     void buscarPedidosOrdenadoPorClienteDecrescente() {
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("Pedro");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("Ana");
         pedido2.setDescricao("Hamburguer");
         pedido2.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("João");
         pedido3.setDescricao("Hamburguer");
         pedido3.setStatus(StatusPedido.RECEBIDO);
@@ -340,25 +314,21 @@ public class PedidoRepositoryTest {
     void deveOrdenarPedidosPorStatusECliente() {
 
         Pedido pedido1 = new Pedido();
-        pedido1.setId(UUID.randomUUID());
         pedido1.setCliente("Pedro");
         pedido1.setDescricao("Hamburguer");
         pedido1.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido2 = new Pedido();
-        pedido2.setId(UUID.randomUUID());
         pedido2.setCliente("João");
         pedido2.setDescricao("Hamburguer");
         pedido2.setStatus(StatusPedido.EM_PREPARACAO);
 
         Pedido pedido3 = new Pedido();
-        pedido3.setId(UUID.randomUUID());
         pedido3.setCliente("Ana");
         pedido3.setDescricao("Hamburguer");
         pedido3.setStatus(StatusPedido.RECEBIDO);
 
         Pedido pedido4 = new Pedido();
-        pedido4.setId(UUID.randomUUID());
         pedido4.setCliente("Maria");
         pedido4.setDescricao("Hamburguer");
         pedido4.setStatus(StatusPedido.EM_PREPARACAO);
@@ -384,7 +354,6 @@ public class PedidoRepositoryTest {
     void deveBuscarPedidosPaginados() {
         for (int i = 1; i <= 7; i++) {
             Pedido pedido = new Pedido();
-            pedido.setId(UUID.randomUUID());
             pedido.setCliente("Cliente " + i);
             pedido.setDescricao("Pedido " + 1);
             pedido.setStatus(StatusPedido.RECEBIDO);
@@ -421,7 +390,6 @@ public class PedidoRepositoryTest {
 
         for(String cliente : clientes) {
             Pedido pedido = new Pedido();
-            pedido.setId(UUID.randomUUID());
             pedido.setCliente(cliente);
             pedido.setDescricao("Hamburguer");
             pedido.setStatus(StatusPedido.RECEBIDO);
@@ -472,7 +440,6 @@ public class PedidoRepositoryTest {
 
         for(int i = 0; i < clientes.size(); i++) {
             Pedido pedido = new Pedido();
-            pedido.setId(UUID.randomUUID());
             pedido.setCliente(clientes.get(i));
             pedido.setDescricao("Hamburguer");
             pedido.setStatus(status.get(i));
@@ -504,7 +471,6 @@ public class PedidoRepositoryTest {
 
         //Criando um pedido
         Pedido pedido = new Pedido();
-        pedido.setId(UUID.randomUUID());
         pedido.setCliente("João");
         pedido.setDescricao("Pedido teste");
         pedido.setStatus(StatusPedido.RECEBIDO);
@@ -513,7 +479,6 @@ public class PedidoRepositoryTest {
 
         //Cria um produto
         Produto produto = new Produto();
-        produto.setId(UUID.randomUUID());
         produto.setNome("Hamburguer");
         produto.setPreco(new BigDecimal("20.00"));
         produto.setAtivo(true);
@@ -522,7 +487,6 @@ public class PedidoRepositoryTest {
 
         //Cria um item
         ItemPedido item = new ItemPedido();
-        item.setId(UUID.randomUUID());
         item.setPedido(pedido);
         item.setProduto(produto);
         item.setQuantidade(2);
@@ -550,14 +514,12 @@ public class PedidoRepositoryTest {
 
         //Criando pedido
         Pedido pedido = new Pedido();
-        pedido.setId(UUID.randomUUID());
         pedido.setCliente("João");
         pedido.setDescricao("Pedido com cascade");
         pedido.setStatus(StatusPedido.RECEBIDO);
 
         //Criando produto
         Produto produto = new Produto();
-        produto.setId(UUID.randomUUID());
         produto.setNome("Hamburguer");
         produto.setPreco(new BigDecimal("20.00"));
         produto.setAtivo(true);
@@ -566,7 +528,6 @@ public class PedidoRepositoryTest {
 
         //Criando item
         ItemPedido item = new ItemPedido();
-        item.setId(UUID.randomUUID());
         item.setPedido(pedido);
         item.setProduto(produto);
         item.setQuantidade(2);
@@ -590,14 +551,12 @@ public class PedidoRepositoryTest {
 
         //Criando pedido
         Pedido pedido = new Pedido();
-        pedido.setId(UUID.randomUUID());
         pedido.setCliente("João");
         pedido.setDescricao("Pedido com orphanRemoval");
         pedido.setStatus(StatusPedido.RECEBIDO);
 
         //Criando produto
         Produto produto = new Produto();
-        produto.setId(UUID.randomUUID());
         produto.setNome("Hamburguer");
         produto.setPreco(new BigDecimal("20.00"));
         produto.setAtivo(true);
@@ -606,7 +565,6 @@ public class PedidoRepositoryTest {
 
         //Criando item
         ItemPedido item = new ItemPedido();
-        item.setId(UUID.randomUUID());
         item.setPedido(pedido);
         item.setProduto(produto);
         item.setQuantidade(2);

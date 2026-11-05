@@ -1,15 +1,20 @@
 package com.lanchonete.pedidosapi.service;
 
 import com.lanchonete.pedidosapi.dto.AtualizarStatusPedidoDTO;
+import com.lanchonete.pedidosapi.dto.ItemPedidoRequestDTO;
 import com.lanchonete.pedidosapi.dto.PedidoRequestDTO;
 import com.lanchonete.pedidosapi.exception.PedidoNaoEncontradoException;
 import com.lanchonete.pedidosapi.exception.PedidoStatusInvalidoException;
+import com.lanchonete.pedidosapi.model.ItemPedido;
 import com.lanchonete.pedidosapi.model.Pedido;
+import com.lanchonete.pedidosapi.model.Produto;
 import com.lanchonete.pedidosapi.model.StatusPedido;
 import com.lanchonete.pedidosapi.repository.PedidoRepository;
+import com.lanchonete.pedidosapi.repository.ProdutoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,9 +23,11 @@ import java.util.UUID;
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final ProdutoRepository produtoRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository) {
+    public PedidoService(PedidoRepository pedidoRepository, ProdutoRepository produtoRepository) {
         this.pedidoRepository = pedidoRepository;
+        this.produtoRepository = produtoRepository;
     }
 
     public Pedido buscarPorId(UUID id) {
@@ -32,14 +39,26 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
+    @Transactional
     public Pedido cadastrar(PedidoRequestDTO dto) {
-        Pedido pedido = new Pedido();
 
-        pedido.setId(UUID.randomUUID());
+        Pedido pedido = new Pedido();
         pedido.setCliente(dto.cliente());
         pedido.setDescricao(dto.descricao());
         pedido.setStatus(StatusPedido.RECEBIDO);
 
+        for (ItemPedidoRequestDTO itens : dto.item()) {
+            Produto produto = produtoRepository.findById(itens.id())
+                    .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
+
+            ItemPedido itemPedido = new ItemPedido();
+            itemPedido.setPedido(pedido);
+            itemPedido.setProduto(produto);
+            itemPedido.setQuantidade(itens.quantidade());
+            itemPedido.setPrecoUnitatio(produto.getPreco());
+
+            pedido.getItens().add(itemPedido);
+        }
         return pedidoRepository.save(pedido);
     }
 

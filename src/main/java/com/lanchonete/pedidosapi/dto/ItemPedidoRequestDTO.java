@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record ItemPedidoRequestDTO(
         @NotNull
-        UUID produto,
+        UUID id,
 
         @NotNull
         @Min(1)

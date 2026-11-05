@@ -1,7 +1,6 @@
 package com.lanchonete.pedidosapi.model;
 
 import jakarta.persistence.*;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import java.util.UUID;
 public class Pedido {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, length = 100)
