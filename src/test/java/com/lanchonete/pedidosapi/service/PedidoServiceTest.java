@@ -6,6 +6,7 @@ import com.lanchonete.pedidosapi.dto.PedidoRequestDTO;
 import com.lanchonete.pedidosapi.dto.PedidoResponseDTO;
 import com.lanchonete.pedidosapi.exception.PedidoNaoEncontradoException;
 import com.lanchonete.pedidosapi.exception.PedidoStatusInvalidoException;
+import com.lanchonete.pedidosapi.exception.ProdutoInativoException;
 import com.lanchonete.pedidosapi.model.ItemPedido;
 import com.lanchonete.pedidosapi.model.Pedido;
 import com.lanchonete.pedidosapi.model.Produto;
@@ -244,6 +245,32 @@ public class PedidoServiceTest {
             verify(produtoRepository).findById(id3);
 
             verify(repository, times(1)).save(result);
+        }
+
+        @Test
+        void naoDeveCadastrarPedidoComProdutoInativo() {
+
+            UUID produtoId = UUID.randomUUID();
+
+            Produto hamburguer = new Produto();
+            hamburguer.setId(produtoId);
+            hamburguer.setNome("Hamburguer");
+            hamburguer.setPreco(new BigDecimal("25.00"));
+            hamburguer.setAtivo(false);
+
+            PedidoRequestDTO dto = new PedidoRequestDTO(
+                    "Carlos",
+                    "Hamburguer",
+                    List.of(new ItemPedidoRequestDTO(produtoId, 2))
+            );
+
+            when(produtoRepository.findById(produtoId)).thenReturn(Optional.of(hamburguer));
+
+            assertThrows(ProdutoInativoException.class,
+                    () -> service.cadastrar(dto));
+
+            verify(produtoRepository).findById(produtoId);
+            verify(repository, never()).save(any(Pedido.class));
         }
     }
 

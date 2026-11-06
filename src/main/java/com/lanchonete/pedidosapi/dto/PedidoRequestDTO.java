@@ -14,10 +14,10 @@ public record PedidoRequestDTO(
         String cliente,
 
         @NotBlank(message = "A descrição do pedido é obrigatório!")
-        @Size(max = 255, message = "A descrição do pedido deve ter no máxino 255 caracteres!")
+        @Size(max = 255, message = "A descrição do pedido deve ter no máximo 255 caracteres!")
         String descricao,
 
-        @NotEmpty
+        @NotEmpty(message = "O pedido deve conter pelo menos 1 item!")
         @Valid
         List<ItemPedidoRequestDTO> item
 ) {

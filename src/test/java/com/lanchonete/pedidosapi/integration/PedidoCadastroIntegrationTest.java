@@ -2,6 +2,7 @@ package com.lanchonete.pedidosapi.integration;
 
 import com.lanchonete.pedidosapi.dto.ItemPedidoRequestDTO;
 import com.lanchonete.pedidosapi.dto.PedidoRequestDTO;
+import com.lanchonete.pedidosapi.exception.ProdutoInativoException;
 import com.lanchonete.pedidosapi.model.ItemPedido;
 import com.lanchonete.pedidosapi.model.Pedido;
 import com.lanchonete.pedidosapi.model.Produto;
@@ -173,6 +174,34 @@ public class PedidoCadastroIntegrationTest {
         long quantidadeDepois = pedidoRepository.count();
 
         assertEquals(quantidadeAntes, quantidadeDepois);
+
+    }
+
+    @Test
+    void naoDeveCadastrarPedidoComProdutoInativo() {
+
+        Produto produto = new Produto();
+        produto.setNome("Hamburguer");
+        produto.setPreco(new BigDecimal("25.00"));
+        produto.setAtivo(false);
+
+        produtoRepository.saveAndFlush(produto);
+
+        PedidoRequestDTO dto = new PedidoRequestDTO(
+                "Carlos",
+                "Hamburguer de frango",
+                List.of(new ItemPedidoRequestDTO(produto.getId(), 2))
+        );
+
+        long quantidadeAntes = pedidoRepository.count();
+
+        ProdutoInativoException exception = assertThrows(ProdutoInativoException.class,
+                () -> pedidoService.cadastrar(dto));
+
+        assertEquals("O produto Hamburguer está inativo!", exception.getMessage());
+
+        assertEquals(quantidadeAntes, pedidoRepository.count());
+
 
     }
 

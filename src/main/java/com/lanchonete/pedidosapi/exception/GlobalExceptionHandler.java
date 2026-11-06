@@ -1,6 +1,5 @@
 package com.lanchonete.pedidosapi.exception;
 
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -62,6 +61,18 @@ public class GlobalExceptionHandler {
                 exception.getMessage()
         );
         return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+    }
+
+    @ExceptionHandler(ProdutoInativoException.class)
+    public ResponseEntity<ErroResposta> tratarProdutoInativo(ProdutoInativoException exception) {
+
+        ErroResposta erro = new ErroResposta(
+                HttpStatus.UNPROCESSABLE_CONTENT.value(),
+                exception.getMessage()
+        );
+
+        return ResponseEntity.status(erro.status()).body(erro);
+
     }
 
 }

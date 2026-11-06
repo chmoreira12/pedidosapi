@@ -5,6 +5,7 @@ import com.lanchonete.pedidosapi.dto.ItemPedidoRequestDTO;
 import com.lanchonete.pedidosapi.dto.PedidoRequestDTO;
 import com.lanchonete.pedidosapi.exception.PedidoNaoEncontradoException;
 import com.lanchonete.pedidosapi.exception.PedidoStatusInvalidoException;
+import com.lanchonete.pedidosapi.exception.ProdutoInativoException;
 import com.lanchonete.pedidosapi.model.ItemPedido;
 import com.lanchonete.pedidosapi.model.Pedido;
 import com.lanchonete.pedidosapi.model.Produto;
@@ -50,6 +51,12 @@ public class PedidoService {
         for (ItemPedidoRequestDTO itens : dto.item()) {
             Produto produto = produtoRepository.findById(itens.id())
                     .orElseThrow(() -> new RuntimeException("Produto não encontrado!"));
+
+            if(!produto.isAtivo()) {
+                throw new ProdutoInativoException(
+                  "O produto " + produto.getNome() + " está inativo!"
+                );
+            }
 
             ItemPedido itemPedido = new ItemPedido();
             itemPedido.setPedido(pedido);
