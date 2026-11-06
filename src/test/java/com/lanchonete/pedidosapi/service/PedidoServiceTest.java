@@ -3,10 +3,10 @@ package com.lanchonete.pedidosapi.service;
 import com.lanchonete.pedidosapi.dto.AtualizarStatusPedidoDTO;
 import com.lanchonete.pedidosapi.dto.ItemPedidoRequestDTO;
 import com.lanchonete.pedidosapi.dto.PedidoRequestDTO;
-import com.lanchonete.pedidosapi.dto.PedidoResponseDTO;
 import com.lanchonete.pedidosapi.exception.PedidoNaoEncontradoException;
 import com.lanchonete.pedidosapi.exception.PedidoStatusInvalidoException;
 import com.lanchonete.pedidosapi.exception.ProdutoInativoException;
+import com.lanchonete.pedidosapi.exception.ProdutoNaoEncontradoException;
 import com.lanchonete.pedidosapi.model.ItemPedido;
 import com.lanchonete.pedidosapi.model.Pedido;
 import com.lanchonete.pedidosapi.model.Produto;
@@ -17,13 +17,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.platform.engine.TestExecutionResult;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -270,6 +268,29 @@ public class PedidoServiceTest {
                     () -> service.cadastrar(dto));
 
             verify(produtoRepository).findById(produtoId);
+            verify(repository, never()).save(any(Pedido.class));
+        }
+
+        @Test
+        void naoDeveCadastrarPedidoComProdutoInexistente() {
+
+            UUID produtoId = UUID.randomUUID();
+
+            PedidoRequestDTO dto = new PedidoRequestDTO(
+                    "Carlos",
+                    "Pedido com produto inexistente!",
+                    List.of(new ItemPedidoRequestDTO(produtoId, 2))
+            );
+
+            when(produtoRepository.findById(produtoId)).thenReturn(Optional.empty());
+
+            ProdutoNaoEncontradoException exception = assertThrows(ProdutoNaoEncontradoException.class,
+                    () -> service.cadastrar(dto));
+
+            assertEquals("Produto não encontrado: " + produtoId, exception.getMessage());
+
+            verify(produtoRepository).findById(produtoId);
+
             verify(repository, never()).save(any(Pedido.class));
         }
     }

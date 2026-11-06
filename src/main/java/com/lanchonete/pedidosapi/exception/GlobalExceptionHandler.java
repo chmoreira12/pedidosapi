@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
                 exception.getMessage()
         );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
             "O json enviado contém dados inválidos!"
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -50,7 +50,7 @@ public class GlobalExceptionHandler {
                 erros
         );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
     @ExceptionHandler(PedidoStatusInvalidoException.class)
@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.CONFLICT.value(),
                 exception.getMessage()
         );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
     @ExceptionHandler(ProdutoInativoException.class)
@@ -73,6 +73,17 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(erro.status()).body(erro);
 
+    }
+
+    @ExceptionHandler(ProdutoNaoEncontradoException.class)
+    public ResponseEntity<ErroResposta> tratarProdutoNaoEncontrado(ProdutoNaoEncontradoException exception) {
+
+        ErroResposta erro = new ErroResposta(
+                HttpStatus.NOT_FOUND.value(),
+                exception.getMessage()
+        );
+
+        return ResponseEntity.status(erro.status()).body(erro);
     }
 
 }
